@@ -1,0 +1,23 @@
+ARG PHP_VERSION=7
+FROM elbcoast/php:${PHP_VERSION}
+
+# Install XDebug
+RUN set -ex \
+	&& apk add --no-cache --virtual .xdebug-deps \
+	        autoconf \
+	        dpkg-dev dpkg \
+            file \
+            g++ \
+            gcc \
+            libc-dev \
+            make \
+            pcre-dev \
+            pkgconf \
+            re2c \
+        && pecl install xdebug \
+        && docker-php-ext-enable xdebug; \
+        echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
+        echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini; \
+        echo "xdebug.remote_connect_back=off" >> /usr/local/etc/php/conf.d/xdebug.ini; \
+        echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini; \
+        apk del .xdebug-deps
