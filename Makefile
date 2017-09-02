@@ -1,5 +1,5 @@
 NAME = elbcoast/php
-VERSIONS = 7.0.22 7.1.8
+VERSIONS = 7.0.23 7.1.9
 
 .PHONY: all build tag_latest release tag_version
 
