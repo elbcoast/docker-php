@@ -1,0 +1,42 @@
+#### Usage ##############
+#
+# Start everything with:
+# docker-compose up -d
+#
+# Execute commands on containers like this:
+# docker-compose run (container name) (command)
+#
+# Examples:
+#
+# Execute composer:
+# docker-compose run php composer
+#
+# Get installed php version:
+# docker-compose run php php --version
+#
+#
+version: '2'
+
+services:
+
+    php:
+        image: elbcoast/php:7.1-xdebug
+        ports:
+            - 9000
+        volumes:
+            - .:/var/www:z
+        environment:
+            COMPOSER_HOME: /var/www/var/composer
+
+
+    # URL: http://127.0.0.1:8000
+    web:
+        image: nginx
+        ports:
+            - "8000:80"
+        links:
+            - php:php-fpm
+        volumes_from:
+            - php
+        volumes:
+            - ./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf
