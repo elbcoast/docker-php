@@ -1,5 +1,5 @@
 NAME = elbcoast/php
-VERSIONS = 7.0.23 7.1.9
+VERSIONS = 7.0.26 7.1.12 7.2.0
 
 .PHONY: all build tag_latest release tag_version
 
@@ -17,9 +17,9 @@ release: tag_latest
 
 # Builds the docker images
 define build_docker
-	docker build -t $(NAME):${1} --build-arg PHP_VERSION=${1} .
-	docker build -f Dockerfile-xdebug -t $(NAME):${1}-xdebug --build-arg PHP_VERSION=${1} .
-	docker build -f Dockerfile-blackfire -t $(NAME):${1}-blackfire --build-arg PHP_VERSION=${1} .
+	docker build -f $(shell echo ${1} | cut -f1,2 -d.)/Dockerfile -t $(NAME):${1} --build-arg PHP_VERSION=${1} .
+	docker build -f $(shell echo ${1} | cut -f1,2 -d.)/Dockerfile-xdebug -t $(NAME):${1}-xdebug --build-arg PHP_VERSION=${1} .
+	docker build -f $(shell echo ${1} | cut -f1,2 -d.)/Dockerfile-blackfire -t $(NAME):${1}-blackfire --build-arg PHP_VERSION=${1} .
 
 endef
 
