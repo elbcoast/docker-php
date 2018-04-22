@@ -27,7 +27,7 @@ RUN echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/reposito
         --with-jpeg-dir=/usr/include/ \
         --with-libxml-dir=/usr/include/ \
     && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
-    && docker-php-ext-install -j${NPROC} iconv mbstring intl gd pdo pdo_mysql zip exif xml \
+    && docker-php-ext-install -j${NPROC} iconv mbstring intl gd pdo_mysql zip exif xml \
     && apk del .php-deps
 
 ADD php.ini /usr/local/etc/php/php.ini
