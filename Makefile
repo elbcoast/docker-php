@@ -1,5 +1,5 @@
 NAME = elbcoast/php
-VERSIONS = 7.0.29 7.1.16 7.2.4
+VERSIONS = 7.0.30 7.1.17 7.2.5
 
 .PHONY: all build tag_latest release tag_version
 
@@ -13,7 +13,7 @@ tag_latest:
 	$(foreach VERSION,$(VERSIONS),$(call tag_docker,$(VERSION)))
 
 release: tag_latest
-	docker push $(NAME)
+	$(foreach VERSION,$(VERSIONS),$(call push_docker,$(VERSION)))
 
 # Builds the docker images
 define build_docker
@@ -28,5 +28,16 @@ define tag_docker
 	docker tag $(NAME):${1} $(NAME):$(shell echo ${1} | cut -f1,2 -d.)
 	docker tag $(NAME):${1}-xdebug $(NAME):$(shell echo ${1} | cut -f1,2 -d.)-xdebug
 	docker tag $(NAME):${1}-blackfire $(NAME):$(shell echo ${1} | cut -f1,2 -d.)-blackfire
+
+endef
+
+# Pushes the created docker images
+define push_docker
+	docker push $(NAME):${1}
+	docker push $(NAME):${1}-xdebug
+	docker push $(NAME):${1}-blackfire
+	docker push $(NAME):$(shell echo ${1} | cut -f1,2 -d.)
+	docker push $(NAME):$(shell echo ${1} | cut -f1,2 -d.)-xdebug
+	docker push $(NAME):$(shell echo ${1} | cut -f1,2 -d.)-blackfire
 
 endef
